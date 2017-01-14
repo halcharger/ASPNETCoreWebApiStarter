@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StarterProject.Common;
+using StarterProject.Queries.MappingProfiles;
 
 namespace StarterProject.WebApi
 {
@@ -28,6 +31,7 @@ namespace StarterProject.WebApi
             // Add framework services.
             services.AddMvc();
             services.AddAppSettings(Configuration);
+            services.AddAutoMapperWithProfiles();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +52,15 @@ namespace StarterProject.WebApi
             var appSettings = new AppSettings();
             new ConfigureFromConfigurationOptions<AppSettings>(appSettingsSection).Configure(appSettings);
             services.Add(new ServiceDescriptor(typeof(AppSettings), appSettings));
+        }
+
+        public static void AddAutoMapperWithProfiles(this IServiceCollection services)
+        {
+            var assembliesContainingMappingProfiles = new[]
+            {
+                typeof(UserProfile)
+            };
+            services.AddAutoMapper(assembliesContainingMappingProfiles);
         }
     }
 }
