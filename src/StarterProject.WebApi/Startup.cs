@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StarterProject.Common;
 using StarterProject.Queries.MappingProfiles;
+using StarterProject.Queries.Users;
 
 namespace StarterProject.WebApi
 {
@@ -32,6 +35,7 @@ namespace StarterProject.WebApi
             services.AddMvc();
             services.AddAppSettings(Configuration);
             services.AddAutoMapperWithProfiles();
+            services.AddMediatrWithHandlers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +65,15 @@ namespace StarterProject.WebApi
                 typeof(UserProfile)
             };
             services.AddAutoMapper(assembliesContainingMappingProfiles);
+        }
+
+        public static void AddMediatrWithHandlers(this IServiceCollection services)
+        {
+            var assembliesContainingMediatrHandlers = new []
+            {
+                typeof(UsersQueryHandler)
+            };
+            services.AddMediatR(assembliesContainingMediatrHandlers);
         }
     }
 }

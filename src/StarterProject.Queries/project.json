@@ -3,6 +3,7 @@
 
   "dependencies": {
     "AutoMapper": "5.2.0",
+    "MediatR": "3.0.0",
     "NETStandard.Library": "1.6.0",
     "StarterProject.Common": "1.0.0-*",
     "StarterProject.Data": "1.0.0-*",

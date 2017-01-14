@@ -1,37 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using StarterProject.Data.Entities;
+using StarterProject.Queries.Users;
 using StarterProject.ViewModels;
 
 namespace StarterProject.WebApi.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IMapper mapper;
+        private readonly IMediator mediatr;
 
-        public UserController(IMapper mapper)
+        public UserController(IMediator mediatr)
         {
-            this.mapper = mapper;
+            this.mediatr = mediatr;
         }
 
         [HttpGet]
         [Route("api/users")]
         public async Task<IEnumerable<UserViewModel>> GetUsers()
         {
-            var users = new[]
-            {
-                new User {Id = 1, Email = $"{Guid.NewGuid()}@gmail.com", FullName = Guid.NewGuid().ToString()},
-                new User {Id = 2, Email = $"{Guid.NewGuid()}@gmail.com", FullName = Guid.NewGuid().ToString()},
-                new User {Id = 3, Email = $"{Guid.NewGuid()}@gmail.com", FullName = Guid.NewGuid().ToString()},
-            };
-            
-            var viewmodels = users.Select(mapper.Map<UserViewModel>).ToList();
-
-            return viewmodels;
+            return await mediatr.Send(new UsersQuery());
         }
     }
 }
