@@ -3,12 +3,15 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StarterProject.Common;
+using StarterProject.Data;
+using StarterProject.Data.DependencyInjection;
 using StarterProject.Queries.MappingProfiles;
 using StarterProject.Queries.Users;
 
@@ -36,6 +39,9 @@ namespace StarterProject.WebApi
             services.AddAppSettings(Configuration);
             services.AddAutoMapperWithProfiles();
             services.AddMediatrWithHandlers();
+            services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase());
+
+            services.ConfigureDependecyInjectionForData();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +49,9 @@ namespace StarterProject.WebApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            var context = app.ApplicationServices.GetService<AppDbContext>();
+            context.SeedData();//add test data to in memory database for testing, remove for actual projects
 
             app.UseMvc();
         }
