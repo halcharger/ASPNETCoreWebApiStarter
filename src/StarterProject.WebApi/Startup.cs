@@ -17,7 +17,7 @@ using StarterProject.Queries.Users;
 
 namespace StarterProject.WebApi
 {
-    public class Startup
+    public partial class Startup
     {
         public Startup(IHostingEnvironment env)
         {
@@ -52,6 +52,8 @@ namespace StarterProject.WebApi
 
             var context = app.ApplicationServices.GetService<AppDbContext>();
             context.SeedData();//add test data to in memory database for testing, remove for actual projects
+
+            ConfigureAuth(app);
 
             app.UseMvc();
         }
