@@ -4,6 +4,8 @@
   "dependencies": {
     "AutoMapper": "5.2.0",
     "NETStandard.Library": "1.6.1"
+    "MediatR": "3.0.0",
+    "NExtensions.Core": "1.0.52"
   },
 
   "frameworks": {

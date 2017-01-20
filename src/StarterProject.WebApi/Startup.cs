@@ -1,14 +1,15 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
+using StarterProject.Commands.MappingProfiles;
+using StarterProject.Commands.Users;
 using StarterProject.Common;
 using StarterProject.Data;
 using StarterProject.Data.DependencyInjection;
@@ -35,7 +36,11 @@ namespace StarterProject.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(opts =>
+            {
+                // Force camel case to Json
+                opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
             services.AddAppSettings(Configuration);
             services.AddAutoMapperWithProfiles();
             services.AddMediatrWithHandlers();
@@ -74,7 +79,8 @@ namespace StarterProject.WebApi
         {
             var assembliesContainingMappingProfiles = new[]
             {
-                typeof(UserProfile)
+                typeof(UserProfile), 
+                typeof(UserMappingProfile)
             };
             services.AddAutoMapper(assembliesContainingMappingProfiles);
         }
@@ -83,7 +89,8 @@ namespace StarterProject.WebApi
         {
             var assembliesContainingMediatrHandlers = new []
             {
-                typeof(UsersQueryHandler)
+                typeof(UsersQueryHandler),
+                typeof(SaveUserCommandHandler)
             };
             services.AddMediatR(assembliesContainingMediatrHandlers);
         }
