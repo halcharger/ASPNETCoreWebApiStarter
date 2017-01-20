@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,7 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
+using StarterProject.Commands.DependencyInjection;
 using StarterProject.Commands.MappingProfiles;
+using StarterProject.Commands.Mediatr;
 using StarterProject.Commands.Users;
 using StarterProject.Common;
 using StarterProject.Data;
@@ -36,16 +40,21 @@ namespace StarterProject.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc().AddJsonOptions(opts =>
+            services.AddMvc()
+                    .AddJsonOptions(opts => opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
+                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaveUserCommandValidator>());
+
+            foreach (var svc in services)
             {
-                // Force camel case to Json
-                opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+                Console.WriteLine($"{svc.ServiceType.FullName}");
+            }
+
             services.AddAppSettings(Configuration);
             services.AddAutoMapperWithProfiles();
             services.AddMediatrWithHandlers();
             services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase());
-
+            
+            //services.ConfigureDependecyInjectionForCommandValidators();
             services.ConfigureDependecyInjectionForData();
         }
 
@@ -54,9 +63,6 @@ namespace StarterProject.WebApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
-            var context = app.ApplicationServices.GetService<AppDbContext>();
-            context.SeedData();//add test data to in memory database for testing, remove for actual projects
 
             ConfigureAuth(app);
 
@@ -98,6 +104,8 @@ namespace StarterProject.WebApi
                 typeof(SaveUserCommandHandler)
             };
             services.AddMediatR(assembliesContainingMediatrHandlers);
+
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(FluentValidationPipelineBehaviour<,>));
         }
     }
 }

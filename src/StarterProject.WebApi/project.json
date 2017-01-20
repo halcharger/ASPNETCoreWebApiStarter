@@ -2,6 +2,7 @@
   "dependencies": {
     "AutoMapper": "5.2.0",
     "AutoMapper.Extensions.Microsoft.DependencyInjection": "1.2.0",
+    "FluentValidation.AspNetCore": "6.4.0-beta9",
     "MediatR": "3.0.0",
     "MediatR.Extensions.Microsoft.DependencyInjection": "2.0.0",
     "Microsoft.AspNetCore.Authentication": "1.1.0",
