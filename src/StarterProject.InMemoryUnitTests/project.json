@@ -5,7 +5,7 @@
     "dotnet-test-nunit": "3.4.0-beta-3",
     "FluentAssertions": "4.18.0",
     "Microsoft.EntityFrameworkCore.InMemory": "1.1.0",
-    "NETStandard.Library": "1.6.0",
+    "NETStandard.Library": "1.6.1",
     "NUnit": "3.6.0",
     "StarterProject.Commands": "1.0.0-*",
     "StarterProject.Common": "1.0.0-*",
