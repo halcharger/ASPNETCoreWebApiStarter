@@ -30,8 +30,15 @@ namespace StarterProject.Commands.Users
             if (cmd.Id == 0)
             {
                 //This code is to facilitate the default in-memory database, it will need to be changed for actual live scenarios that use a persistent database with auto identity increment like SQL Server
-                var maxId = await context.Users.MaxAsync(u => u.Id);
-                user.Id = maxId + 1;
+                if (await context.Users.AnyAsync())
+                {
+                    var maxId = await context.Users.MaxAsync(u => u.Id);
+                    user.Id = maxId + 1;
+                }
+                else
+                {
+                    user.Id = 1;
+                }
 
                 context.Users.Add(user);
             }

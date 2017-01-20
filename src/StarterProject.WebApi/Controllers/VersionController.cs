@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StarterProject.Common;
 
 namespace StarterProject.WebApi.Controllers
@@ -15,7 +14,7 @@ namespace StarterProject.WebApi.Controllers
 
         [HttpGet]
         [Route("api/version")]
-        public async Task<string> GetVersion()
+        public string GetVersion()
         {
             return $"{settings.Environment} 1.0.0.0";
         }

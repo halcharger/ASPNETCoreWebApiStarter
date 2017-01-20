@@ -8,11 +8,7 @@ namespace StarterProject.Data.DependencyInjection
         {
             //This is where we explicitly configure the Data assembly dependency injection
 
-            //Because we usig InMemory databasse we need the DbContext to be a singleton to keep the data in memory across request
-            services.AddSingleton<AppDbContext>();
-
-            //For persistent sotre like SQL Server, uncomment the below
-            //services.AddScoped<AppDbContext>();
+            services.AddScoped<AppDbContext>();
         }
     }
 }

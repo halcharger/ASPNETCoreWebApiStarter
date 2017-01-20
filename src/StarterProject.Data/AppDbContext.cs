@@ -13,14 +13,6 @@ namespace StarterProject.Data
 
         public DbSet<User> Users { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>(b =>
-            {
-                b.HasKey(e => e.Id);
-                b.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
-        }
         public void SeedData()
         {
             var users = new[]
