@@ -12,18 +12,5 @@ namespace StarterProject.Data
         }
 
         public DbSet<User> Users { get; set; }
-
-        public void SeedData()
-        {
-            var users = new[]
-{
-                new User {Id = 1, Email = $"{Guid.NewGuid()}@gmail.com", FullName = Guid.NewGuid().ToString()},
-                new User {Id = 2, Email = $"{Guid.NewGuid()}@gmail.com", FullName = Guid.NewGuid().ToString()},
-                new User {Id = 3, Email = $"{Guid.NewGuid()}@gmail.com", FullName = Guid.NewGuid().ToString()},
-            };
-
-            Users.AddRange(users);
-            SaveChanges();
-        }
     }
 }
