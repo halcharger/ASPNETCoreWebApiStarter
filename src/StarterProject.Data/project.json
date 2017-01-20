@@ -3,7 +3,7 @@
 
   "dependencies": {
     "Microsoft.EntityFrameworkCore.InMemory": "1.1.0",
-    "NETStandard.Library": "1.6.0",
+    "NETStandard.Library": "1.6.1",
     "StarterProject.Common": "1.0.0-*"
   },
 

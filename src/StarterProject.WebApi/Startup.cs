@@ -55,6 +55,7 @@ namespace StarterProject.WebApi
 
             ConfigureAuth(app);
 
+            app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseMvc();
         }
     }

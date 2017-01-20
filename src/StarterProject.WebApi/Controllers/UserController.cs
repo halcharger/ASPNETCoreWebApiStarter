@@ -18,9 +18,16 @@ namespace StarterProject.WebApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [Route("api/users")]
         public async Task<IEnumerable<UserViewModel>> GetUsers()
+        {
+            return await mediatr.Send(new UsersQuery());
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("api/users/authorized")]
+        public async Task<IEnumerable<UserViewModel>> GetUsersAuthorized()
         {
             return await mediatr.Send(new UsersQuery());
         }
