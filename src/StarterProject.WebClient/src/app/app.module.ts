@@ -6,7 +6,9 @@ import { HttpModule, JsonpModule } from '@angular/http';
 import { requestOptionsProvider } from './default-request-options.service';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+//import { AppRoutingModule } from './app-routing.module';
+import { DashboardRoutingModule } from './dashboard/dashboard.routes.module';
+import { UserModule } from './user/user.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -17,7 +19,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 @NgModule({
     declarations: [
         AppComponent,
-        UserListComponent,
+        //UserListComponent,
         DashboardComponent
     ],
     imports: [
@@ -25,7 +27,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         FormsModule,
         HttpModule,
         JsonpModule,
-        AppRoutingModule,
+       // AppRoutingModule,
+        DashboardRoutingModule,
+        UserModule,
         NgbModule.forRoot()
     ],
     providers: [requestOptionsProvider],

@@ -138,9 +138,12 @@
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
     <TypeScriptCompile Include="src\app\dashboard\dashboard.component.ts" />
+    <TypeScriptCompile Include="src\app\dashboard\dashboard.routes.module.ts" />
     <TypeScriptCompile Include="src\app\default-request-options.service.ts" />
     <TypeScriptCompile Include="src\app\rxjs-operators.ts" />
     <TypeScriptCompile Include="src\app\user\user-list.component.ts" />
+    <TypeScriptCompile Include="src\app\user\user.module.ts" />
+    <TypeScriptCompile Include="src\app\user\user.routes.module.ts" />
     <TypeScriptCompile Include="src\app\user\user.service.ts" />
     <TypeScriptCompile Include="src\app\user\user.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
