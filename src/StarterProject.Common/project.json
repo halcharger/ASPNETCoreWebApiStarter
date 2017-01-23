@@ -5,7 +5,8 @@
     "AutoMapper": "5.2.0",
     "NETStandard.Library": "1.6.1",
     "MediatR": "3.0.0",
-    "NExtensions.Core": "1.0.52"
+    "NExtensions.Core": "1.0.52",
+    "Newtonsoft.Json": "9.0.2-beta2"
   },
 
   "frameworks": {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -14,12 +13,10 @@ namespace StarterProject.WebApi.Controllers
     public class UserController : Controller
     {
         private readonly IMediator mediatr;
-        private readonly IServiceProvider serviceProvider;
 
-        public UserController(IMediator mediatr, IServiceProvider serviceProvider)
+        public UserController(IMediator mediatr)
         {
             this.mediatr = mediatr;
-            this.serviceProvider = serviceProvider;
         }
 
         [HttpGet]

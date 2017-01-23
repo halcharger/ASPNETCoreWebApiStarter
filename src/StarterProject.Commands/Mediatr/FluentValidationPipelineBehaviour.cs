@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -8,17 +9,22 @@ using StarterProject.Common;
 
 namespace StarterProject.Commands.Mediatr
 {
-    public class FluentValidationPipelineBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse> where TResponse : Result, new()
+    public class FluentValidationPipelineBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         private readonly IValidator<TRequest>[] validators;
 
-        public FluentValidationPipelineBehaviour(IValidator<TRequest> validator)
+        public FluentValidationPipelineBehaviour(IValidator<TRequest>[] validators)
         {
-            validators = new [] {validator};
+            this.validators = validators;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next)
         {
+            //Fluent Validation currently only applies to Commands, if the request does not inherit from Command<>, the exit
+            //We need to find a better way (a faster way) to this other than reflection
+            var cmd = request as Command;
+            if (cmd == null) return await next();
+
             var context = new ValidationContext(request);
 
             var results = new List<ValidationResult>();
@@ -33,9 +39,12 @@ namespace StarterProject.Commands.Mediatr
 
             if (failures.Any())
             {
-                var result = new TResponse();
-                result.SetFailures(failures.Select(f => f.ErrorMessage).ToList());
-                return result;
+                var response = Activator.CreateInstance<TResponse>();
+                
+                var result = response as Result;
+                result?.SetFailures(failures.Select(f => f.ErrorMessage).ToList());
+
+                return response;
             }
 
             return await next();

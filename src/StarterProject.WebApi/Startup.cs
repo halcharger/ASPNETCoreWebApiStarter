@@ -1,4 +1,6 @@
 ﻿using System;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -12,7 +14,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using StarterProject.Commands.DependencyInjection;
 using StarterProject.Commands.MappingProfiles;
-using StarterProject.Commands.Mediatr;
 using StarterProject.Commands.Users;
 using StarterProject.Common;
 using StarterProject.Data;
@@ -34,28 +35,29 @@ namespace StarterProject.WebApi
             Configuration = builder.Build();
         }
 
+        public IContainer ApplicationContainer { get; private set; }
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddMvc()
                     .AddJsonOptions(opts => opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
                     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaveUserCommandValidator>());
 
-            foreach (var svc in services)
-            {
-                Console.WriteLine($"{svc.ServiceType.FullName}");
-            }
-
             services.AddAppSettings(Configuration);
             services.AddAutoMapperWithProfiles();
             services.AddMediatrWithHandlers();
             services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase());
             
-            //services.ConfigureDependecyInjectionForCommandValidators();
             services.ConfigureDependecyInjectionForData();
+            services.ConfigureDependecyInjectionForCommandPipelineBehaviours();
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            ApplicationContainer = builder.Build();
+            return new AutofacServiceProvider(ApplicationContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,8 +106,6 @@ namespace StarterProject.WebApi
                 typeof(SaveUserCommandHandler)
             };
             services.AddMediatR(assembliesContainingMediatrHandlers);
-
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(FluentValidationPipelineBehaviour<,>));
         }
     }
 }

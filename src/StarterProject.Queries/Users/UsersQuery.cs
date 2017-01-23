@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using MediatR;
 using StarterProject.ViewModels;
 
 namespace StarterProject.Queries.Users
 {
-    public class UsersQuery : IRequest<IEnumerable<UserViewModel>>
+    public class UsersQuery : Query<IEnumerable<UserViewModel>>
     {
         
     }

@@ -7,6 +7,7 @@
     "MediatR": "3.0.0",
     "Microsoft.EntityFrameworkCore": "1.1.0",
     "NETStandard.Library": "1.6.1",
+    "Newtonsoft.Json": "9.0.2-beta2",
     "StarterProject.Common": "1.0.0-*",
     "StarterProject.Data": "1.0.0-*",
     "StarterProject.Queries": "1.0.0-*",
