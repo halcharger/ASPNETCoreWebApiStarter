@@ -49,7 +49,7 @@ namespace StarterProject.WebApi
             services.AddAppSettings(Configuration);
             services.AddAutoMapperWithProfiles();
             services.AddMediatrWithHandlers();
-            services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase());
+            ConfigureDatabase(services);
             
             services.ConfigureDependecyInjectionForData();
             services.ConfigureDependecyInjectionForCommandPipelineBehaviours();
@@ -58,6 +58,13 @@ namespace StarterProject.WebApi
             builder.Populate(services);
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
+        }
+
+        protected virtual void ConfigureDatabase(IServiceCollection services)
+        {
+            //This will become a persistent database like SQL server in a real project
+            //This method will also be overriden for the Integration Tests which will explicitly want to use an In-memory database.
+            services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

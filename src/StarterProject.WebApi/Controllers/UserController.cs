@@ -29,7 +29,7 @@ namespace StarterProject.WebApi.Controllers
 
         [HttpPost]
         [Route("api/users/save")]
-        public async Task<IActionResult> SaveUser(SaveUserCommand cmd)
+        public async Task<IActionResult> SaveUser([FromBody]SaveUserCommand cmd)
         {
             var result = await mediatr.Send(cmd);
 
