@@ -10,7 +10,7 @@ using StarterProject.Data.Entities;
 
 namespace StarterProject.Commands.Mediatr
 {
-    public class CommandAuditPipelineBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public class CommandAuditPipelineBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : Command<TResponse> where TResponse : Result, new()
     {
         private readonly AppDbContext context;
         private readonly Stopwatch stopwatch = new Stopwatch();
@@ -20,19 +20,14 @@ namespace StarterProject.Commands.Mediatr
             this.context = context;
         }
 
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TRequest cmd, RequestHandlerDelegate<TResponse> next)
         {
-            //Command Audits currently only applies to Commands, if the request does not inherit from Command<>, the exit
-            //We need to find a better way (a faster way) to this other than reflection
-            var cmd = request as Command;
-            if (cmd == null) return await next();
-
             TResponse result;
             stopwatch.Start();
 
             try
             {
-                result = await next();
+                cmd.Result = result = await next();
             }
             catch (Exception ex)
             {
@@ -49,7 +44,7 @@ namespace StarterProject.Commands.Mediatr
 
         }
 
-        private async Task AuditCommand(Command cmd, TimeSpan timeTakenToExecuteCommand)
+        private async Task AuditCommand(TRequest cmd, TimeSpan timeTakenToExecuteCommand)
         {
             var audit = new CommandAudit
             {
@@ -67,7 +62,7 @@ namespace StarterProject.Commands.Mediatr
 
         }
 
-        private string GetExceptionMessageFrom(Command cmd)
+        private string GetExceptionMessageFrom(TRequest cmd)
         {
             return cmd.Result?.Exception?.Message ?? cmd.Result?.Failures?.JoinWithComma().TakeCharacters(4000) ?? string.Empty;
         }

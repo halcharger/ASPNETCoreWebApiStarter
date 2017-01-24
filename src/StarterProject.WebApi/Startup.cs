@@ -66,6 +66,11 @@ namespace StarterProject.WebApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             ConfigureAuth(app);
 
             app.UseCors(builder =>
