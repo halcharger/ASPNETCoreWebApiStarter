@@ -8,7 +8,7 @@ import { UserListComponent } from './user-list.component';
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(userRoutes)
+        RouterModule.forChild(userRoutes)
     ],
     exports: [
         RouterModule
