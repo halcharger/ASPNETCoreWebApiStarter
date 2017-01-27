@@ -18,10 +18,9 @@ namespace StarterProject.IntegrationTests.Users
         [Test]
         public async Task CanAddNewUser()
         {
-            var cmd = new SaveUserCommand{FullName = Guid.NewGuid().ToString(), Email = $"{Guid.NewGuid()}@gmail.com"};
+            var cmd = new SaveUserCommand{FullName = Guid.NewGuid().ToString(), Email = $"{Guid.NewGuid()}@gmail.com", UserName = Guid.NewGuid().ToString()};
 
-            var newUserId = await AddUser(cmd);
-            newUserId.Should().Be("1");
+            await AddUser(cmd);
 
             var users = await GetUsers();
 
@@ -35,9 +34,11 @@ namespace StarterProject.IntegrationTests.Users
 
             var response = await Client.PostAsync("api/users/save", content);
 
-            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsStringAsync();
 
-            return await response.Content.ReadAsStringAsync();
+            response.IsSuccessStatusCode.Should().BeTrue(result);
+
+            return result;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetUsers()

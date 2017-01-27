@@ -2,8 +2,8 @@
 
 namespace StarterProject.Data.Entities
 {
-    public class User : IdentityUser
+    public class UserClaim : IdentityUserClaim<int>
     {
-        public string FullName { get; set; }
+        
     }
 }

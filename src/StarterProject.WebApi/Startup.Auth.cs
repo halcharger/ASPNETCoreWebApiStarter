@@ -3,12 +3,16 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using StarterProject.Data.Entities;
 using StarterProject.WebApi.OAuth;
 
 namespace StarterProject.WebApi
 {
+    //for reference see: https://stormpath.com/blog/token-authentication-asp-net-core
     public partial class Startup
     {
         // The secret key every token will be signed with.
@@ -49,6 +53,9 @@ namespace StarterProject.WebApi
                 ClockSkew = TimeSpan.Zero
             };
 
+            //Use only ONE of the below options:
+
+            //1. Configuring sending JWT in Authorization header in each request
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
                 AutomaticAuthenticate = true,
@@ -56,28 +63,40 @@ namespace StarterProject.WebApi
                 TokenValidationParameters = tokenValidationParameters
             });
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                AuthenticationScheme = "Cookie",
-                CookieName = "access_token",
-                TicketDataFormat = new CustomJwtDataFormat(
-                    SecurityAlgorithms.HmacSha256,
-                    tokenValidationParameters)
-            });
+            //2. Confgure sending JWT in cookie in each request.
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //{
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = true,
+            //    AuthenticationScheme = "Cookie",
+            //    CookieName = "access_token",
+            //    TicketDataFormat = new CustomJwtDataFormat(
+            //        SecurityAlgorithms.HmacSha256,
+            //        tokenValidationParameters)
+            //});
         }
 
-        private Task<ClaimsIdentity> GetIdentity(string username, string password)
+        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            // Don't do this in production, obviously!
-            if (username == "TEST" && password == "TEST123")
+            //get SignInManager from DI
+            var signInManager = ApplicationContainer.Resolve<SignInManager<User>>();
+            var userManager = ApplicationContainer.Resolve<UserManager<User>>();
+
+            if (signInManager == null) throw new ArgumentNullException("Could not retrieve SignInManager from Autofac");
+            if (userManager == null) throw new ArgumentNullException("Could not retrieve UserManager from Autofac");
+
+            var loginResult = await signInManager.PasswordSignInAsync(username, password, false, false);
+
+            if (loginResult.Succeeded)
             {
-                return Task.FromResult(new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { }));
+                var user = await userManager.FindByNameAsync(username);
+                var claims = await userManager.GetClaimsAsync(user);
+
+                return new ClaimsIdentity(new GenericIdentity(username, "Token"), claims);
             }
 
             // Credentials are invalid, or account doesn't exist
-            return Task.FromResult<ClaimsIdentity>(null);
+            return null;
         }
     }
 }

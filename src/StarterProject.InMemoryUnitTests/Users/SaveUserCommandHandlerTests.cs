@@ -43,51 +43,54 @@ namespace StarterProject.InMemoryUnitTests.Users
             var handler = GetHandler();
             var cmd = new SaveUserCommand
             {
-                Id = 0,
+                Id = null,
                 FullName = Guid.NewGuid().ToString(), 
-                Email = $"{Guid.NewGuid()}@gmail.com"
+                Email = $"{Guid.NewGuid()}@gmail.com", 
+                UserName = Guid.NewGuid().ToString()
             };
 
             var result = await handler.Handle(cmd);
 
             result.IsSuccess.Should().BeTrue();
 
-            await AssertUserExistsInContext(1, cmd.FullName, cmd.Email);
+            await AssertUserExistsInContext(result.Value, cmd.FullName, cmd.Email, cmd.UserName);
         }
 
         [Test]
         public async Task SaveUserUpdatesExistingUserInContext()
         {
             //setup | add existing user to db context
-            await AddUserToContext(1, "allen firth", "allen.firth@gmail.com");
+            var existingUserId = Guid.NewGuid().ToString();
+            await AddUserToContext(existingUserId, "allen firth", "allen.firth@gmail.com", Guid.NewGuid().ToString());
 
             var handler = GetHandler();
             var cmd = new SaveUserCommand
             {
-                Id = 1,
+                Id = existingUserId,
                 FullName = "Robbie", 
-                Email = "robbie@gmail.com"
+                Email = "robbie@gmail.com", 
+                UserName = Guid.NewGuid().ToString()
             };
 
             var result = await handler.Handle(cmd);
 
             result.IsSuccess.Should().BeTrue();
 
-            await AssertUserExistsInContext(cmd.Id, cmd.FullName, cmd.Email);
+            await AssertUserExistsInContext(cmd.Id, cmd.FullName, cmd.Email, cmd.UserName);
         }
 
-        private async Task AssertUserExistsInContext(int id, string fullName, string email)
+        private async Task AssertUserExistsInContext(string id, string fullName, string email, string username)
         {
             var context = serviceProvider.GetRequiredService<AppDbContext>();
-            var user = await context.Users.SingleOrDefaultAsync(u => u.Id == id && u.FullName == fullName && u.Email == email);
+            var user = await context.Users.SingleOrDefaultAsync(u => u.Id == id && u.FullName == fullName && u.Email == email && u.UserName == username);
 
-            if (user == null) Assert.Fail($"Could not find User in DbContext with Id: {id}, FullName: {fullName}, Email: {email}");
+            if (user == null) Assert.Fail($"Could not find User in DbContext with Id: {id}, FullName: {fullName}, Email: {email}, Username: {username}");
         }
 
-        private async Task AddUserToContext(int id, string fullName, string email)
+        private async Task AddUserToContext(string id, string fullName, string email, string username)
         {
             var context = serviceProvider.GetRequiredService<AppDbContext>();
-            context.Users.Add(new User {Id = id, FullName = fullName, Email = email});
+            context.Users.Add(new User {Id = id, FullName = fullName, Email = email, UserName = username});
             await context.SaveChangesAsync();
         }
     }

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
 using StarterProject.Commands.Users;
 
@@ -15,6 +16,7 @@ namespace StarterProject.UnitTests.Users
             var cmd = new SaveUserCommand
             {
                 FullName = string.Empty,
+                UserName = "halcharger",
                 Email = "allen.firth@gmail.com"
             };
 
@@ -25,11 +27,12 @@ namespace StarterProject.UnitTests.Users
         }
 
         [Test]
-        public void EmailIsREquired()
+        public void EmailIsRequired()
         {
             var cmd = new SaveUserCommand
             {
-                FullName = "john dow",
+                FullName = "allen firth",
+                UserName = "halcharger",
                 Email = string.Empty
             };
 
@@ -37,6 +40,22 @@ namespace StarterProject.UnitTests.Users
 
             result.IsValid.Should().BeFalse();
             result.Errors.Should().Contain(e => e.ErrorMessage == SaveUserCommandValidator.EmailRequiredMsg);
+        }
+
+        [Test]
+        public void UsernameIsRequired()
+        {
+            var cmd = new SaveUserCommand
+            {
+                FullName = "allen firth",
+                Email = "allen.firth@gmail.com", 
+                UserName = string.Empty
+            };
+
+            var result = validator.Validate(cmd);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().Contain(e => e.ErrorMessage == SaveUserCommandValidator.UserNameRequiredMsg);
         }
     }
 }

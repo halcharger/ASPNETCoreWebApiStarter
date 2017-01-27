@@ -6,6 +6,7 @@ using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,7 @@ using StarterProject.Commands.Users;
 using StarterProject.Common;
 using StarterProject.Data;
 using StarterProject.Data.DependencyInjection;
+using StarterProject.Data.Entities;
 using StarterProject.Queries.MappingProfiles;
 using StarterProject.Queries.Users;
 
@@ -49,8 +51,10 @@ namespace StarterProject.WebApi
             services.AddAppSettings(Configuration);
             services.AddAutoMapperWithProfiles();
             services.AddMediatrWithHandlers();
+
             ConfigureDatabase(services);
-            
+            ConfigureAspNetIdentity(services);
+
             services.ConfigureDependecyInjectionForData();
             services.ConfigureDependecyInjectionForCommandPipelineBehaviours();
 
@@ -58,6 +62,28 @@ namespace StarterProject.WebApi
             builder.Populate(services);
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
+        }
+
+        protected virtual void ConfigureAspNetIdentity(IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                //options.Password.RequireDigit = true;
+                //options.Password.RequiredLength = 8;
+                //options.Password.RequireNonAlphanumeric = false;
+                //options.Password.RequireUppercase = true;
+                //options.Password.RequireLowercase = false;
+
+                // Lockout settings
+                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                //options.Lockout.MaxFailedAccessAttempts = 10;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
         }
 
         protected virtual void ConfigureDatabase(IServiceCollection services)
