@@ -4,5 +4,7 @@ sudo: required
 mono: none
 dotnet: 1.0.0-preview2-003121
 dotnet: 1.0.0-preview2-003131
+before_install:
+ - chmod +x gradlew
 script:
   - ./build.sh --quiet verify
