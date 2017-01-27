@@ -20,7 +20,16 @@ namespace StarterProject.WebApi.Controllers
             this.mediatr = mediatr;
         }
 
+        [HttpPost]
+        [Route("api/users/register")]
+        public async Task<IActionResult> RegisterUser([FromBody]RegisterUserCommand cmd)
+        {
+            var result = await mediatr.Send(cmd);
+            return result.ToActionResult();
+        }
+
         [HttpGet]
+        [Authorize]
         [Route("api/users")]
         public async Task<IEnumerable<UserViewModel>> GetUsers()
         {
@@ -34,14 +43,6 @@ namespace StarterProject.WebApi.Controllers
             var result = await mediatr.Send(cmd);
 
             return result.ToActionResult();
-        }
-
-        [HttpGet]
-        [Authorize]
-        [Route("api/users/authorized")]
-        public async Task<IEnumerable<UserViewModel>> GetUsersAuthorized()
-        {
-            return await mediatr.Send(new UsersQuery());
         }
     }
 }
