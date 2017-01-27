@@ -1,10 +1,10 @@
 ﻿import { NgModule } from '@angular/core';
 
-import { UserModule } from './user/user.module';
-
+import { HomeModule } from './home/home.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
     imports: [],
-    exports: [UserModule]
+    exports: [HomeModule, AuthModule]
 })
 export class AppFeaturesModule { }

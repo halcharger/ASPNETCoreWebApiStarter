@@ -9,17 +9,13 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-route.module';
 import { AppFeaturesModule } from './app-features.module';
 
-import { DashboardRoutingModule } from './dashboard/dashboard.routes.module';
+//import { DashboardRoutingModule } from './dashboard/dashboard.routes.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
-
-import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
     declarations: [
-        AppComponent,
-        DashboardComponent
+        AppComponent
     ],
     imports: [
         BrowserModule,
@@ -27,7 +23,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         HttpModule,
         JsonpModule,
         AppRoutingModule,
-        DashboardRoutingModule,
+        //DashboardRoutingModule,
         AppFeaturesModule,
         NgbModule.forRoot()
     ],
