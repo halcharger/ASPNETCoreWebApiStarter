@@ -43,7 +43,10 @@ namespace StarterProject.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
+            //The order of these service registrations is critical, do not randomaly change the order without knowing what you're doing.
+
+            services.AddAspNetIdentity();
+
             services.AddMvc()
                     .AddJsonOptions(opts => opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
                     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaveUserCommandValidator>());
@@ -53,7 +56,6 @@ namespace StarterProject.WebApi
             services.AddMediatrWithHandlers();
 
             ConfigureDatabase(services);
-            ConfigureAspNetIdentity(services);
 
             services.ConfigureDependecyInjectionForData();
             services.ConfigureDependecyInjectionForCommandPipelineBehaviours();
@@ -62,28 +64,6 @@ namespace StarterProject.WebApi
             builder.Populate(services);
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
-        }
-
-        protected virtual void ConfigureAspNetIdentity(IServiceCollection services)
-        {
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings
-                //options.Password.RequireDigit = true;
-                //options.Password.RequiredLength = 8;
-                //options.Password.RequireNonAlphanumeric = false;
-                //options.Password.RequireUppercase = true;
-                //options.Password.RequireLowercase = false;
-
-                // Lockout settings
-                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                //options.Lockout.MaxFailedAccessAttempts = 10;
-
-                // User settings
-                options.User.RequireUniqueEmail = true;
-            });
         }
 
         protected virtual void ConfigureDatabase(IServiceCollection services)
@@ -118,6 +98,27 @@ namespace StarterProject.WebApi
 
     public static class ServicesExtensions
     {
+        public static void AddAspNetIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                //options.Password.RequireDigit = true;
+                //options.Password.RequiredLength = 8;
+                //options.Password.RequireNonAlphanumeric = false;
+                //options.Password.RequireUppercase = true;
+                //options.Password.RequireLowercase = false;
+
+                // Lockout settings
+                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                //options.Lockout.MaxFailedAccessAttempts = 10;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+        }
         public static void AddAppSettings(this IServiceCollection services, IConfigurationRoot configuration)
         {
             var appSettingsSection = configuration.GetSection("AppSettings");

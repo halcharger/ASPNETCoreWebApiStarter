@@ -4,9 +4,10 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using StarterProject.Commands.Users;
 using StarterProject.Data.Entities;
 using StarterProject.WebApi.OAuth;
 
@@ -22,6 +23,8 @@ namespace StarterProject.WebApi
         private void ConfigureAuth(IApplicationBuilder app)
         {
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+
+            app.UseIdentity();
 
             app.UseSimpleTokenProvider(new TokenProviderOptions
             {
@@ -78,25 +81,13 @@ namespace StarterProject.WebApi
 
         private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            //get SignInManager from DI
-            var signInManager = ApplicationContainer.Resolve<SignInManager<User>>();
-            var userManager = ApplicationContainer.Resolve<UserManager<User>>();
+            var mediatr = ApplicationContainer.Resolve<IMediator>();
 
-            if (signInManager == null) throw new ArgumentNullException("Could not retrieve SignInManager from Autofac");
-            if (userManager == null) throw new ArgumentNullException("Could not retrieve UserManager from Autofac");
+            var result = await mediatr.Send(new LoginCommand {Username = username, Password = password});
 
-            var loginResult = await signInManager.PasswordSignInAsync(username, password, false, false);
-
-            if (loginResult.Succeeded)
-            {
-                var user = await userManager.FindByNameAsync(username);
-                var claims = await userManager.GetClaimsAsync(user);
-
-                return new ClaimsIdentity(new GenericIdentity(username, "Token"), claims);
-            }
-
-            // Credentials are invalid, or account doesn't exist
-            return null;
+            return result.IsSuccess
+                ? new ClaimsIdentity(new GenericIdentity(username, "Token"), result.Value)
+                : null;
         }
     }
 }

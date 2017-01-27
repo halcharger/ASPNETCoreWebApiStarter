@@ -2,33 +2,17 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using StarterProject.Commands.Users;
 using StarterProject.Data;
 using StarterProject.Data.Entities;
-using StarterProject.WebApi;
 
 namespace StarterProject.InMemoryUnitTests.Users
 {
     [TestFixture]
-    public class SaveUserCommandHandlerTests
+    public class SaveUserCommandHandlerTests : InMemoryHandlerTests
     {
-        private IServiceProvider serviceProvider;
-
-        [SetUp]
-        public void Setup()
-        {
-            var services = new ServiceCollection();
-
-            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
-            services.AddScoped<AppDbContext>();
-
-            services.AddAutoMapperWithProfiles();
-
-            serviceProvider = services.BuildServiceProvider();
-        }
 
         protected SaveUserCommandHandler GetHandler()
         {
@@ -79,13 +63,6 @@ namespace StarterProject.InMemoryUnitTests.Users
             await AssertUserExistsInContext(cmd.Id, cmd.FullName, cmd.Email, cmd.UserName);
         }
 
-        private async Task AssertUserExistsInContext(string id, string fullName, string email, string username)
-        {
-            var context = serviceProvider.GetRequiredService<AppDbContext>();
-            var user = await context.Users.SingleOrDefaultAsync(u => u.Id == id && u.FullName == fullName && u.Email == email && u.UserName == username);
-
-            if (user == null) Assert.Fail($"Could not find User in DbContext with Id: {id}, FullName: {fullName}, Email: {email}, Username: {username}");
-        }
 
         private async Task AddUserToContext(string id, string fullName, string email, string username)
         {
