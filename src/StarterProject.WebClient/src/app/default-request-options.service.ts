@@ -6,7 +6,6 @@ export class DefaultRequestOptions extends BaseRequestOptions {
 
     constructor() {
         super();
-        console.log('Hello');
         // Set the default 'Content-Type' header
         this.headers.set('Content-Type', 'application/json');
     }
