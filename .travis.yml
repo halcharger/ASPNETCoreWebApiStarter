@@ -2,9 +2,5 @@ language: csharp
 solution: ASPNETCoreWebApiStarter.sln
 mono: none
 dotnet: 1.0.0-preview2-003131
-script:
-  - dotnet test /src/StarterProject.UnitTests/project.json
-  - dotnet test /src/StarterProject.InMemoryUnitTests/project.json
-  - dotnet test /src/StarterProject.IntegrationTests/project.json
 os:
  - osx
