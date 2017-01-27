@@ -149,6 +149,7 @@
     <TypeScriptCompile Include="src\app\auth\register\register.module.ts" />
     <TypeScriptCompile Include="src\app\auth\register\register.route.module.ts" />
     <TypeScriptCompile Include="src\app\common\auth.guard.ts" />
+    <TypeScriptCompile Include="src\app\common\http-client.ts" />
     <TypeScriptCompile Include="src\app\home\dashboard\dashboard.component.ts" />
     <TypeScriptCompile Include="src\app\home\dashboard\dashboard.module.ts" />
     <TypeScriptCompile Include="src\app\home\dashboard\dashboard.routes.module.ts" />
