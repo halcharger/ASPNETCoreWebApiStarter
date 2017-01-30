@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-route.module';
 import { AppFeaturesModule } from './app-features.module';
 
-//import { DashboardRoutingModule } from './dashboard/dashboard.routes.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -23,7 +22,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         HttpModule,
         JsonpModule,
         AppRoutingModule,
-        //DashboardRoutingModule,
         AppFeaturesModule,
         NgbModule.forRoot()
     ],

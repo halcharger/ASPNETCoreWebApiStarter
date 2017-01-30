@@ -103,6 +103,7 @@ namespace StarterProject.WebApi.OAuth
 
             // Serialize and return the response
             context.Response.ContentType = "application/json";
+            context.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
             await context.Response.WriteAsync(JsonConvert.SerializeObject(response, _serializerSettings));
         }
 

@@ -1,6 +1,7 @@
 ﻿// Observable Version
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../common/authentication.service';
 
 @Component({
     moduleId: module.id,
@@ -8,5 +9,10 @@ import { ActivatedRoute } from '@angular/router';
     templateUrl: 'home.component.html'
 })
 export class HomeComponent {
+    constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
+    logout() {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
+    }
 }
