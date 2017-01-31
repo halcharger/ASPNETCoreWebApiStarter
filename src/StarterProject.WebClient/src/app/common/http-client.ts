@@ -2,7 +2,7 @@
 import { Http, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class HttpClient {
@@ -22,7 +22,7 @@ export class HttpClient {
     get(url) {
         let headers = new Headers();
         this.createAuthorizationHeader(headers);
-        return this.http.get(url, {
+        return this.http.get(environment.serverBaseUrl + url, {
             headers: headers
         })
             .map(this.extractData)
@@ -32,7 +32,7 @@ export class HttpClient {
     post(url, data) {
         let headers = new Headers();
         this.createAuthorizationHeader(headers);
-        return this.http.post(url, data, {
+        return this.http.post(environment.serverBaseUrl + url, data, {
             headers: headers
         });
     }
