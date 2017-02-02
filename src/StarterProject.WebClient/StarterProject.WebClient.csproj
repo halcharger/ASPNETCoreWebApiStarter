@@ -104,7 +104,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="package.json" />
-    <Content Include="src\app\dashboard\dashboard.component.html" />
+    <Content Include="src\app\auth\login\login.component.html" />
+    <Content Include="src\app\auth\register\register.component.html" />
+    <Content Include="src\app\home\dashboard\dashboard.component.html" />
+    <Content Include="src\app\home\home.component.html" />
     <Content Include="src\assets\.gitkeep" />
     <Content Include="src\tsconfig.json" />
     <Content Include="tslint.json" />
@@ -118,7 +121,7 @@
   <ItemGroup>
     <Content Include="src\app\app.component.css" />
     <Content Include="src\app\app.component.html" />
-    <Content Include="src\app\user\user-list.component.html" />
+    <Content Include="src\app\home\user\user-list.component.html" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\index.html" />
     <Content Include="src\styles.css" />
@@ -138,25 +141,36 @@
     <TypeScriptCompile Include="src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
-    <TypeScriptCompile Include="src\app\dashboard\dashboard.component.ts" />
-    <TypeScriptCompile Include="src\app\dashboard\dashboard.routes.module.ts" />
+    <TypeScriptCompile Include="src\app\auth\auth.module.ts" />
+    <TypeScriptCompile Include="src\app\auth\login\login.component.ts" />
+    <TypeScriptCompile Include="src\app\auth\login\login.module.ts" />
+    <TypeScriptCompile Include="src\app\auth\login\login.route.module.ts" />
+    <TypeScriptCompile Include="src\app\auth\register\register.component.ts" />
+    <TypeScriptCompile Include="src\app\auth\register\register.module.ts" />
+    <TypeScriptCompile Include="src\app\auth\register\register.route.module.ts" />
+    <TypeScriptCompile Include="src\app\common\auth.guard.ts" />
+    <TypeScriptCompile Include="src\app\common\authentication.service.ts" />
+    <TypeScriptCompile Include="src\app\common\http-client.ts" />
+    <TypeScriptCompile Include="src\app\home\dashboard\dashboard.component.ts" />
+    <TypeScriptCompile Include="src\app\home\dashboard\dashboard.module.ts" />
+    <TypeScriptCompile Include="src\app\home\dashboard\dashboard.routes.module.ts" />
     <TypeScriptCompile Include="src\app\default-request-options.service.ts" />
+    <TypeScriptCompile Include="src\app\home\home.component.ts" />
+    <TypeScriptCompile Include="src\app\home\home.module.ts" />
+    <TypeScriptCompile Include="src\app\home\home.routes.module.ts" />
     <TypeScriptCompile Include="src\app\rxjs-operators.ts" />
-    <TypeScriptCompile Include="src\app\user\user-list.component.ts" />
-    <TypeScriptCompile Include="src\app\user\user.module.ts" />
-    <TypeScriptCompile Include="src\app\user\user.routes.module.ts" />
-    <TypeScriptCompile Include="src\app\user\user.service.ts" />
-    <TypeScriptCompile Include="src\app\user\user.ts" />
+    <TypeScriptCompile Include="src\app\home\user\user-list.component.ts" />
+    <TypeScriptCompile Include="src\app\home\user\user.module.ts" />
+    <TypeScriptCompile Include="src\app\home\user\user.routes.module.ts" />
+    <TypeScriptCompile Include="src\app\home\user\user.service.ts" />
+    <TypeScriptCompile Include="src\app\home\user\user.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />
     <TypeScriptCompile Include="src\polyfills.ts" />
     <TypeScriptCompile Include="src\test.ts" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\app\common\" />
-    <Folder Include="src\app\servies\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
