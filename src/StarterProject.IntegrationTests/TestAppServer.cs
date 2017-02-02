@@ -15,6 +15,8 @@ namespace StarterProject.IntegrationTests
         protected TestServer Server;
         protected HttpClient Client;
 
+        protected string jwt = string.Empty;
+
         public TestAppServer()
         {
             var builder = new WebHostBuilder().UseStartup<IntegrationTestStartup>();
@@ -34,13 +36,23 @@ namespace StarterProject.IntegrationTests
         {
             var content = new StringContent(JsonConvert.SerializeObject(cmd), Encoding.UTF8, "application/json");
 
-            var response = await Client.PostAsync(route, content);
+            var request = Server.CreateRequest(route);
+            request.AddHeader("Authorization", $"Bearer {jwt}");
 
-            var result = await response.Content.ReadAsStringAsync();
+            var response = await request.And(msg => msg.Content = content).PostAsync();
+            //var response = await Client.PostAsync(route, content);
 
-            response.IsSuccessStatusCode.Should().BeTrue(result);
+            return await CheckAndReturnResponseContent(response);
+        }
 
-            return result;
+        public async Task<string> Get(string route)
+        {
+            var request = Server.CreateRequest(route);
+            request.AddHeader("Authorization", $"Bearer {jwt}");
+
+            var response = await request.GetAsync();
+
+            return await CheckAndReturnResponseContent(response);
         }
 
         public async Task<string> Login(string username, string password)
@@ -49,9 +61,22 @@ namespace StarterProject.IntegrationTests
 
             var response = await Client.PostAsync("api/token", content);
 
+            var responseContent =  await CheckAndReturnResponseContent(response);
+
+            dynamic data = JsonConvert.DeserializeObject(responseContent);
+            jwt = data.access_token;
+
+            return responseContent;
+        }
+
+        private async Task<string> CheckAndReturnResponseContent(HttpResponseMessage response)
+        {
             var result = await response.Content.ReadAsStringAsync();
 
-            response.IsSuccessStatusCode.Should().BeTrue();
+            if (response.IsSuccessStatusCode)
+                return result;
+
+            response.IsSuccessStatusCode.Should().BeTrue(result);
 
             return result;
         }

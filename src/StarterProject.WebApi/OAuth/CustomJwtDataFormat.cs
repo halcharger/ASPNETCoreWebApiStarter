@@ -54,7 +54,7 @@ namespace StarterProject.WebApi.OAuth
             }
 
             // Validation passed. Return a valid AuthenticationTicket:
-            return new AuthenticationTicket(principal, new AuthenticationProperties(), "Cookie");
+            return new AuthenticationTicket(principal, new AuthenticationProperties(), "Jwt");
         }
 
         // This ISecureDataFormat implementation is decode-only

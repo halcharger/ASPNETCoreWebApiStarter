@@ -6,6 +6,7 @@ using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,8 @@ using StarterProject.Commands.DependencyInjection;
 using StarterProject.Commands.MappingProfiles;
 using StarterProject.Commands.Users;
 using StarterProject.Common;
+using StarterProject.Common.Auth;
+using StarterProject.Common.DependencyInjection;
 using StarterProject.Data;
 using StarterProject.Data.DependencyInjection;
 using StarterProject.Data.Entities;
@@ -44,8 +47,10 @@ namespace StarterProject.WebApi
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //The order of these service registrations is critical, do not randomaly change the order without knowing what you're doing.
+            services.AddOptions();
 
             services.AddAspNetIdentity();
+            //services.ConfigureAuthorizationPolicies();
 
             services.AddMvc()
                     .AddJsonOptions(opts => opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
@@ -57,20 +62,14 @@ namespace StarterProject.WebApi
 
             ConfigureDatabase(services);
 
-            services.ConfigureDependecyInjectionForData();
+            services.ConfigureCommonServices();
+            services.ConfigureDataServices();
             services.ConfigureDependecyInjectionForCommandPipelineBehaviours();
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
-        }
-
-        protected virtual void ConfigureDatabase(IServiceCollection services)
-        {
-            //This will become a persistent database like SQL server in a real project
-            //This method will also be overriden for the Integration Tests which will explicitly want to use an In-memory database.
-            services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,9 +81,13 @@ namespace StarterProject.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //need to get relevant nuget packages to apply the below
+                //app.UseDatabaseErrorPage();
+                //app.UseBrowserLink();
             }
 
             ConfigureAuth(app);
+            ConfigureSeedData();
 
             app.UseCors(builder =>
             {
@@ -92,12 +95,41 @@ namespace StarterProject.WebApi
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             });
+
             app.UseMvc();
+        }
+
+        protected virtual void ConfigureDatabase(IServiceCollection services)
+        {
+            //This will become a persistent database like SQL server in a real project
+            //This method will also be overriden for the Integration Tests which will explicitly want to use an In-memory database.
+            services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase());
+        }
+
+        protected virtual void ConfigureSeedData()
+        {
+            var userManager = ApplicationContainer.Resolve<UserManager<User>>();
+
+            var user = new User
+            {
+                UserName = "test",
+                Email = "test@gmail.com",
+                FullName = "Test User"
+            };
+
+            userManager.CreateAsync(user, "Testing@123").Wait();
         }
     }
 
     public static class ServicesExtensions
     {
+        public static void ConfigureAuthorizationPolicies(this IServiceCollection services)
+        {
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy(AuthPolicyConstants.IsAdmin, policy => policy.RequireClaim(ClaimsIdentityConstants.IsAdmin));
+            });
+        }
         public static void AddAspNetIdentity(this IServiceCollection services)
         {
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
@@ -131,7 +163,7 @@ namespace StarterProject.WebApi
         {
             var assembliesContainingMappingProfiles = new[]
             {
-                typeof(UserProfile), 
+                typeof(UserProfile),
                 typeof(UserMappingProfile)
             };
             services.AddAutoMapper(assembliesContainingMappingProfiles);
@@ -139,7 +171,7 @@ namespace StarterProject.WebApi
 
         public static void AddMediatrWithHandlers(this IServiceCollection services)
         {
-            var assembliesContainingMediatrHandlers = new []
+            var assembliesContainingMediatrHandlers = new[]
             {
                 typeof(UsersQueryHandler),
                 typeof(SaveUserCommandHandler)

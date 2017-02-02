@@ -1,6 +1,5 @@
 using System;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
@@ -8,7 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 using StarterProject.Commands.Users;
-using StarterProject.Data.Entities;
 using StarterProject.WebApi.OAuth;
 
 namespace StarterProject.WebApi
@@ -20,17 +18,19 @@ namespace StarterProject.WebApi
         // Keep this safe on the server!
         private static readonly string secretKey = "mysupersecret_secretkey!123";
 
-        private void ConfigureAuth(IApplicationBuilder app)
+        protected void ConfigureAuth(IApplicationBuilder app)
         {
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+            var audience = "http://localhost:65018/";
+            var issuer = "PutYourIssuerHere";
 
             app.UseIdentity();
 
             app.UseSimpleTokenProvider(new TokenProviderOptions
             {
                 Path = "/api/token",
-                Audience = "ExampleAudience",
-                Issuer = "ExampleIssuer",
+                Audience = audience,
+                Issuer = issuer,
                 SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
                 IdentityResolver = GetIdentity
             });
@@ -43,13 +43,14 @@ namespace StarterProject.WebApi
 
                 // Validate the JWT Issuer (iss) claim
                 ValidateIssuer = true,
-                ValidIssuer = "ExampleIssuer",
+                ValidIssuer = issuer,
 
                 // Validate the JWT Audience (aud) claim
                 ValidateAudience = true,
-                ValidAudience = "ExampleAudience",
+                ValidAudience = audience,
 
                 // Validate the token expiry
+                RequireExpirationTime = true,
                 ValidateLifetime = true,
 
                 // If you want to allow a certain amount of clock drift, set that here:
@@ -58,7 +59,7 @@ namespace StarterProject.WebApi
 
             //Use only ONE of the below options:
 
-            //1. Configuring sending JWT in Authorization header in each request
+            //1. Configuring reading JWT from Authorization header in each request
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
                 AutomaticAuthenticate = true,
@@ -66,27 +67,16 @@ namespace StarterProject.WebApi
                 TokenValidationParameters = tokenValidationParameters
             });
 
-            //2. Confgure sending JWT in cookie in each request.
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions
-            //{
-            //    AutomaticAuthenticate = true,
-            //    AutomaticChallenge = true,
-            //    AuthenticationScheme = "Cookie",
-            //    CookieName = "access_token",
-            //    TicketDataFormat = new CustomJwtDataFormat(
-            //        SecurityAlgorithms.HmacSha256,
-            //        tokenValidationParameters)
-            //});
         }
 
         private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
             var mediatr = ApplicationContainer.Resolve<IMediator>();
 
-            var result = await mediatr.Send(new LoginCommand {Username = username, Password = password});
+            var result = await mediatr.Send(new LoginCommand { Username = username, Password = password });
 
             return result.IsSuccess
-                ? new ClaimsIdentity(new GenericIdentity(username, "Token"), result.Value)
+                ? new ClaimsIdentity(result.Value)
                 : null;
         }
     }

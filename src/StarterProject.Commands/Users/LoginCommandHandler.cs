@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using StarterProject.Common;
+using StarterProject.Common.Auth;
 using StarterProject.Data.Entities;
 
 namespace StarterProject.Commands.Users
@@ -28,12 +29,15 @@ namespace StarterProject.Commands.Users
                 var user = await userManager.FindByNameAsync(cmd.Username);
                 var claims = await userManager.GetClaimsAsync(user);
 
+                claims.Add(new Claim(ClaimsIdentityConstants.UserId, user.Id));
+                claims.Add(new Claim(ClaimsIdentityConstants.Username, user.UserName));
+                claims.Add(new Claim(ClaimsIdentityConstants.Email, user.Email));
+
                 return new SuccessResult<IList<Claim>>(claims);
             }
 
             // Credentials are invalid, or account doesn't exist
             return new FailureResult<IList<Claim>>("Invalid username or password.");
-
         }
     }
 }
