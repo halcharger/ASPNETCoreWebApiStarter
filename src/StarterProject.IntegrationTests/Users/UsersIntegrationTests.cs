@@ -13,7 +13,13 @@ namespace StarterProject.IntegrationTests.Users
         [Test]
         public async Task CanRegisterNewUserAndLogin()
         {
-            var cmd = new RegisterUserCommand{FullName = Guid.NewGuid().ToString(), Email = $"{Guid.NewGuid()}@gmail.com", UserName = Guid.NewGuid().ToString(), Password = $"U{Guid.NewGuid()}"};
+            var cmd = new RegisterUserCommand
+            {
+                FullName = Guid.NewGuid().ToString(),
+                Email = $"{Guid.NewGuid()}@gmail.com",
+                UserName = Guid.NewGuid().ToString(),
+                Password = $"U{Guid.NewGuid()}"
+            };
 
             var registerResult = await RegisterUser(cmd);
             Console.WriteLine($"new registered user Id: {registerResult}");
@@ -25,6 +31,9 @@ namespace StarterProject.IntegrationTests.Users
             Console.WriteLine($"user details result: {userDetailsResult}");
 
             dynamic userDetails = JsonConvert.DeserializeObject(userDetailsResult);
+
+            string userId = userDetails.userId;
+            userId.Should().NotBeNullOrEmpty();
 
             string email = userDetails.email;
             email.Should().Be(cmd.Email);
