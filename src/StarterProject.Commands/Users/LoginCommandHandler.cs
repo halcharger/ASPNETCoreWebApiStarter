@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using NExtensions.Core;
 using StarterProject.Common;
 using StarterProject.Common.Auth;
 using StarterProject.Data.Entities;
@@ -28,10 +29,12 @@ namespace StarterProject.Commands.Users
             {
                 var user = await userManager.FindByNameAsync(cmd.Username);
                 var claims = await userManager.GetClaimsAsync(user);
+                var roles = await userManager.GetRolesAsync(user);
 
-                claims.Add(new Claim(ClaimsIdentityConstants.UserId, user.Id));
-                claims.Add(new Claim(ClaimsIdentityConstants.Username, user.UserName));
-                claims.Add(new Claim(ClaimsIdentityConstants.Email, user.Email));
+                claims.Add(new Claim(ClaimConstants.UserId, user.Id));
+                claims.Add(new Claim(ClaimConstants.Username, user.UserName));
+                claims.Add(new Claim(ClaimConstants.Email, user.Email));
+                claims.Add(new Claim(ClaimConstants.Roles, roles.JoinWithComma()));
 
                 return new SuccessResult<IList<Claim>>(claims);
             }

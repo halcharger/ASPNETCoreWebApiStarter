@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using StarterProject.Commands.Users;
 
@@ -30,16 +30,12 @@ namespace StarterProject.IntegrationTests.Users
             var userDetailsResult = await Server.Get("api/utility/userdetails");
             Console.WriteLine($"user details result: {userDetailsResult}");
 
-            dynamic userDetails = JsonConvert.DeserializeObject(userDetailsResult);
+            var json = JObject.Parse(userDetailsResult);
 
-            string userId = userDetails.userId;
-            userId.Should().NotBeNullOrEmpty();
+            json["userId"].ToString().Should().NotBeNullOrEmpty();
+            json["email"].ToString().Should().Be(cmd.Email);
+            json["username"].ToString().Should().Be(cmd.UserName);
 
-            string email = userDetails.email;
-            email.Should().Be(cmd.Email);
-
-            string username = userDetails.username;
-            username.Should().Be(cmd.UserName);
         }
 
         public async Task<string> RegisterUser(RegisterUserCommand cmd)

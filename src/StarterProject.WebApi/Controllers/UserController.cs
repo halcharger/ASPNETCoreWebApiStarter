@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StarterProject.Commands.Users;
+using StarterProject.Common.Auth;
 using StarterProject.Queries.Users;
 using StarterProject.ViewModels;
 using StarterProject.WebApi.Extensions;
@@ -28,7 +29,7 @@ namespace StarterProject.WebApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = RoleConstamts.Manager)]
         [Route("api/users")]
         public async Task<IEnumerable<UserViewModel>> GetUsers()
         {

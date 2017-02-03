@@ -109,7 +109,13 @@ namespace StarterProject.WebApi
         protected virtual void ConfigureSeedData()
         {
             var userManager = ApplicationContainer.Resolve<UserManager<User>>();
+            var roleManager = ApplicationContainer.Resolve<RoleManager<IdentityRole>>();
 
+            //create default roles
+            roleManager.CreateAsync(new IdentityRole(RoleConstamts.Admin)).Wait();
+            roleManager.CreateAsync(new IdentityRole(RoleConstamts.Manager)).Wait();
+
+            //create default user
             var user = new User
             {
                 UserName = "test",
@@ -118,6 +124,10 @@ namespace StarterProject.WebApi
             };
 
             userManager.CreateAsync(user, "Testing@123").Wait();
+
+            //assign roles to user
+            userManager.AddToRoleAsync(user, RoleConstamts.Admin).Wait();
+            userManager.AddToRoleAsync(user, RoleConstamts.Manager).Wait();
         }
     }
 
@@ -127,7 +137,7 @@ namespace StarterProject.WebApi
         {
             services.AddAuthorization(opts =>
             {
-                opts.AddPolicy(AuthPolicyConstants.IsAdmin, policy => policy.RequireClaim(ClaimsIdentityConstants.IsAdmin));
+                opts.AddPolicy(AuthPolicyConstants.IsAdmin, policy => policy.RequireClaim(ClaimConstants.IsAdmin));
             });
         }
         public static void AddAspNetIdentity(this IServiceCollection services)
