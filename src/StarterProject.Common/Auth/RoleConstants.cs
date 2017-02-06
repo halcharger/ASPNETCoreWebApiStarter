@@ -1,6 +1,6 @@
 ﻿namespace StarterProject.Common.Auth
 {
-    public class RoleConstamts
+    public class RoleConstants
     {
         public const string Admin = "Admin";
         public const string Manager = "Manager";

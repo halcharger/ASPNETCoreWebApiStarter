@@ -34,23 +34,14 @@ namespace StarterProject.IntegrationTests
 
         public async Task<string> Post(string route, object cmd)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(cmd), Encoding.UTF8, "application/json");
-
-            var request = Server.CreateRequest(route);
-            request.AddHeader("Authorization", $"Bearer {jwt}");
-
-            var response = await request.And(msg => msg.Content = content).PostAsync();
-            //var response = await Client.PostAsync(route, content);
+            var response = await Server.CreateRequestWithAuthHeader(jwt, route, cmd).PostAsync();
 
             return await CheckAndReturnResponseContent(response);
         }
 
         public async Task<string> Get(string route)
         {
-            var request = Server.CreateRequest(route);
-            request.AddHeader("Authorization", $"Bearer {jwt}");
-
-            var response = await request.GetAsync();
+            var response = await Server.CreateRequestWithAuthHeader(jwt, route).GetAsync();
 
             return await CheckAndReturnResponseContent(response);
         }

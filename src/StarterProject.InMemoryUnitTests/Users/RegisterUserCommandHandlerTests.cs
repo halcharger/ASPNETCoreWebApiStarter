@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NExtensions.Core;
 using NUnit.Framework;
@@ -18,7 +19,8 @@ namespace StarterProject.InMemoryUnitTests.Users
         {
             var mapper = serviceProvider.GetRequiredService<IMapper>();
             var manager = serviceProvider.GetRequiredService<UserManager<User>>();
-            return new RegisterUserCommandHandler(manager, mapper);
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            return new RegisterUserCommandHandler(manager, mapper, roleManager);
         }
 
         [Test]

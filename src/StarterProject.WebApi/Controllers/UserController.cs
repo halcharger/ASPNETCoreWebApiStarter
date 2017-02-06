@@ -21,7 +21,8 @@ namespace StarterProject.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/users/register")]
+        [AllowAnonymous]
+        [Route("api/user/register")]
         public async Task<IActionResult> RegisterUser([FromBody]RegisterUserCommand cmd)
         {
             var result = await mediatr.Send(cmd);
@@ -29,19 +30,27 @@ namespace StarterProject.WebApi.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = RoleConstamts.Manager)]
+        [Authorize(Roles = RoleConstants.Admin)]
         [Route("api/users")]
         public async Task<IEnumerable<UserViewModel>> GetUsers()
         {
             return await mediatr.Send(new UsersQuery());
         }
 
+        [HttpGet]
+        [Authorize]
+        [Route("api/user")]
+        public async Task<UserViewModel> GetUser(UserQuery qry)
+        {
+            return await mediatr.Send(qry);
+        }
+
         [HttpPost]
-        [Route("api/users/save")]
-        public async Task<IActionResult> SaveUser([FromBody]SaveUserCommand cmd)
+        [Authorize(Roles = RoleConstants.Admin)]
+        [Route("api/user/update")]
+        public async Task<IActionResult> UpdateUserDetails([FromBody]UpdateUserDetailsCommand cmd)
         {
             var result = await mediatr.Send(cmd);
-
             return result.ToActionResult();
         }
     }

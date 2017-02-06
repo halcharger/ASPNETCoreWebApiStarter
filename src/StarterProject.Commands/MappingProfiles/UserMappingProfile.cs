@@ -8,8 +8,8 @@ namespace StarterProject.Commands.MappingProfiles
     {
         public UserMappingProfile()
         {
-            CreateMap<SaveUserCommand, User>();
             CreateMap<RegisterUserCommand, User>();
+            CreateMap<UpdateUserDetailsCommand, User>();
         }
     }
 }

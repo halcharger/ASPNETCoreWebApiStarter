@@ -54,7 +54,7 @@ namespace StarterProject.WebApi
 
             services.AddMvc()
                     .AddJsonOptions(opts => opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
-                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaveUserCommandValidator>());
+                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UpdateUserDetailsCommandValidator>());
 
             services.AddAppSettings(Configuration);
             services.AddAutoMapperWithProfiles();
@@ -112,8 +112,8 @@ namespace StarterProject.WebApi
             var roleManager = ApplicationContainer.Resolve<RoleManager<IdentityRole>>();
 
             //create default roles
-            roleManager.CreateAsync(new IdentityRole(RoleConstamts.Admin)).Wait();
-            roleManager.CreateAsync(new IdentityRole(RoleConstamts.Manager)).Wait();
+            roleManager.CreateAsync(new IdentityRole(RoleConstants.Admin)).Wait();
+            roleManager.CreateAsync(new IdentityRole(RoleConstants.Manager)).Wait();
 
             //create default user
             var user = new User
@@ -126,8 +126,8 @@ namespace StarterProject.WebApi
             userManager.CreateAsync(user, "Testing@123").Wait();
 
             //assign roles to user
-            userManager.AddToRoleAsync(user, RoleConstamts.Admin).Wait();
-            userManager.AddToRoleAsync(user, RoleConstamts.Manager).Wait();
+            userManager.AddToRoleAsync(user, RoleConstants.Admin).Wait();
+            userManager.AddToRoleAsync(user, RoleConstants.Manager).Wait();
         }
     }
 
@@ -184,7 +184,7 @@ namespace StarterProject.WebApi
             var assembliesContainingMediatrHandlers = new[]
             {
                 typeof(UsersQueryHandler),
-                typeof(SaveUserCommandHandler)
+                typeof(RegisterUserCommandHandler)
             };
             services.AddMediatR(assembliesContainingMediatrHandlers);
         }
