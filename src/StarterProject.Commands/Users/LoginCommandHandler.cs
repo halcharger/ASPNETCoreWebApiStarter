@@ -34,7 +34,7 @@ namespace StarterProject.Commands.Users
                 claims.Add(new Claim(ClaimConstants.UserId, user.Id));
                 claims.Add(new Claim(ClaimConstants.Username, user.UserName));
                 claims.Add(new Claim(ClaimConstants.Email, user.Email));
-                claims.Add(new Claim(ClaimConstants.Roles, roles.JoinWithComma()));
+                roles.ForEach(r => claims.Add(new Claim(ClaimTypes.Role, r)));
 
                 return new SuccessResult<IList<Claim>>(claims);
             }
