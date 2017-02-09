@@ -14,17 +14,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
-using StarterProject.Commands.DependencyInjection;
-using StarterProject.Commands.MappingProfiles;
-using StarterProject.Commands.Users;
-using StarterProject.Common;
-using StarterProject.Common.Auth;
-using StarterProject.Common.DependencyInjection;
-using StarterProject.Data;
-using StarterProject.Data.DependencyInjection;
-using StarterProject.Data.Entities;
-using StarterProject.Queries.MappingProfiles;
-using StarterProject.Queries.Users;
+using StarterProject.WebApi.Commands;
+using StarterProject.WebApi.Commands.Users;
+using StarterProject.WebApi.Common;
+using StarterProject.WebApi.Common.Auth;
+using StarterProject.WebApi.Data;
+using StarterProject.WebApi.Data.Entities;
+using StarterProject.WebApi.MappingProfiles;
+using StarterProject.WebApi.Queries.Users;
 
 namespace StarterProject.WebApi
 {
@@ -63,7 +60,6 @@ namespace StarterProject.WebApi
             ConfigureDatabase(services);
 
             services.ConfigureCommonServices();
-            services.ConfigureDataServices();
             services.ConfigureDependecyInjectionForCommandPipelineBehaviours();
 
             var builder = new ContainerBuilder();

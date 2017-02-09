@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NExtensions.Core;
 using NUnit.Framework;
-using StarterProject.Commands.Users;
-using StarterProject.Data.Entities;
+using StarterProject.WebApi.Commands.Users;
+using StarterProject.WebApi.Data.Entities;
 
 namespace StarterProject.InMemoryUnitTests.Users
 {

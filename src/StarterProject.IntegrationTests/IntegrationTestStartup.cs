@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using StarterProject.Data;
 using StarterProject.WebApi;
+using StarterProject.WebApi.Data;
 
 namespace StarterProject.IntegrationTests
 {

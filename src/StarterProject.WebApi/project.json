@@ -15,6 +15,7 @@
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.EntityFrameworkCore": "1.1.0",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.1.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
@@ -23,11 +24,7 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.NETCore.App": "1.1.0",
-    "StarterProject.Commands": "1.0.0-*",
-    "StarterProject.Common": "1.0.0-*",
-    "StarterProject.Data": "1.0.0-*",
-    "StarterProject.Queries": "1.0.0-*",
-    "StarterProject.ViewModels": "1.0.0-*"
+    "NExtensions.Core": "1.0.52",
   },
 
   "tools": {

@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using StarterProject.Queries.Audits;
-using StarterProject.ViewModels.Audits;
+using StarterProject.WebApi.Queries.Audits;
+using StarterProject.WebApi.ViewModels.Audits;
 
 namespace StarterProject.WebApi.Controllers
 {

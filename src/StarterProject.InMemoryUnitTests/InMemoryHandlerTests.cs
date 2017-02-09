@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using StarterProject.Data;
 using StarterProject.WebApi;
+using StarterProject.WebApi.Data;
 
 namespace StarterProject.InMemoryUnitTests
 {

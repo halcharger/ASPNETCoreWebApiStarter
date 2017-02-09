@@ -4,9 +4,9 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using StarterProject.Commands.Users;
-using StarterProject.Common.Auth;
-using StarterProject.ViewModels;
+using StarterProject.WebApi.Commands.Users;
+using StarterProject.WebApi.Common.Auth;
+using StarterProject.WebApi.ViewModels.Users;
 
 namespace StarterProject.IntegrationTests.Users
 {

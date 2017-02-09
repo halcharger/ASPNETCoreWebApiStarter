@@ -6,7 +6,7 @@ using Autofac;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
-using StarterProject.Commands.Users;
+using StarterProject.WebApi.Commands.Users;
 using StarterProject.WebApi.OAuth;
 
 namespace StarterProject.WebApi

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using StarterProject.Common;
+using StarterProject.WebApi.Common;
 
 namespace StarterProject.WebApi.Extensions
 {

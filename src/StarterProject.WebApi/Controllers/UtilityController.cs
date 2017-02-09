@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using StarterProject.Common;
-using StarterProject.Common.Auth;
+using StarterProject.WebApi.Common;
+using StarterProject.WebApi.Common.Auth;
 
 namespace StarterProject.WebApi.Controllers
 {

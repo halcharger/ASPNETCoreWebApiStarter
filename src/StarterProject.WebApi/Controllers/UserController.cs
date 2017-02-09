@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StarterProject.Commands.Users;
-using StarterProject.Common.Auth;
-using StarterProject.Queries.Users;
-using StarterProject.ViewModels;
+using StarterProject.WebApi.Commands.Users;
+using StarterProject.WebApi.Common.Auth;
 using StarterProject.WebApi.Extensions;
+using StarterProject.WebApi.Queries.Users;
+using StarterProject.WebApi.ViewModels.Users;
 
 namespace StarterProject.WebApi.Controllers
 {

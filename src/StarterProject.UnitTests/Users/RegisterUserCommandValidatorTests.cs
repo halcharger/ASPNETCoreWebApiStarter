@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using StarterProject.Commands.Users;
+using StarterProject.WebApi.Commands.Users;
 
 namespace StarterProject.UnitTests.Users
 {
