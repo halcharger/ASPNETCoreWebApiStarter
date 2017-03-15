@@ -24,7 +24,7 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.NETCore.App": "1.1.0",
-    "NExtensions.Core": "1.0.52",
+    "NExtensions.Core": "1.0.52"
   },
 
   "tools": {
