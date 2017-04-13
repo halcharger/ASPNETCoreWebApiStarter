@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{47E2050A-B95C-4F02-9D4F-DC97534E0C66}"
 EndProject
@@ -9,19 +9,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.travis.yml = .travis.yml
 		build.sh = build.sh
-		global.json = global.json
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "StarterProject.WebApi", "src\StarterProject.WebApi\StarterProject.WebApi.xproj", "{F7F801C8-F422-4F39-9553-4904144D1552}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarterProject.WebApi", "src\StarterProject.WebApi\StarterProject.WebApi.csproj", "{F7F801C8-F422-4F39-9553-4904144D1552}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarterProject.WebClient", "src\StarterProject.WebClient\StarterProject.WebClient.csproj", "{14314384-C152-41D3-9DBC-2C341C29A33E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "StarterProject.InMemoryUnitTests", "src\StarterProject.InMemoryUnitTests\StarterProject.InMemoryUnitTests.xproj", "{A1E27A90-08DE-45B0-87D9-7E65D87C2DF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarterProject.InMemoryUnitTests", "src\StarterProject.InMemoryUnitTests\StarterProject.InMemoryUnitTests.csproj", "{A1E27A90-08DE-45B0-87D9-7E65D87C2DF6}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "StarterProject.UnitTests", "src\StarterProject.UnitTests\StarterProject.UnitTests.xproj", "{5B2F2251-E3F3-4F5D-93C1-8027746F7ACA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarterProject.UnitTests", "src\StarterProject.UnitTests\StarterProject.UnitTests.csproj", "{5B2F2251-E3F3-4F5D-93C1-8027746F7ACA}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "StarterProject.IntegrationTests", "src\StarterProject.IntegrationTests\StarterProject.IntegrationTests.xproj", "{EB1F9A6F-4BA4-49B8-B585-E23567A02F30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarterProject.IntegrationTests", "src\StarterProject.IntegrationTests\StarterProject.IntegrationTests.csproj", "{EB1F9A6F-4BA4-49B8-B585-E23567A02F30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
